@@ -1,0 +1,49 @@
+# Node dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+
+# MongoDB dump files
+dump/
+
+# Uploads or file storage (if any)
+uploads/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional: if you're using TypeScript
+*.tsbuildinfo
+
+# React-specific (frontend)
+frontend/node_modules/
+frontend/build/
+
+# Optional: if using ESLint or Prettier caches
+.eslintcache
+.prettiercache
