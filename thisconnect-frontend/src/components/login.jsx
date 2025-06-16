@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { NavLink } from "react-router";
+import { useNavigate } from 'react-router';
 import axios from 'axios';
+
+
 
 export default function UserLoginForm() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,12 +73,19 @@ export default function UserLoginForm() {
       console.log('User logged in:', response.data);
       setFormData({ email: '', password: '' });
       setRememberMe(false);
+      navigate('/')
     }
   } catch (error) {
     setSubmitMessage('Login failed. Please check your credentials.');
     console.error('Login error:', error.response?.data || error.message);
   } finally {
     setIsSubmitting(false);
+  }
+};
+
+const handleKeyPress = (e) => {
+  if (e.key === 'Enter') {
+    handleSubmit();
   }
 };
 
