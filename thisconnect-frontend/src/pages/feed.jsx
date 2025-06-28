@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { LoginModal } from "../components/modal";
+import ContentCreationForm from "../components/postInput"; 
 
 export default function Feed (){
     return(
         <>
-        <LoginModal />
+        <ContentCreationForm />
         </>
     )
 }
