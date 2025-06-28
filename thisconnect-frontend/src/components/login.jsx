@@ -73,7 +73,7 @@ export default function UserLoginForm() {
       console.log('User logged in:', response.data);
       setFormData({ email: '', password: '' });
       setRememberMe(false);
-      navigate('/')
+      navigate('/feed')
     }
   } catch (error) {
     setSubmitMessage('Login failed. Please check your credentials.');
