@@ -1,5 +1,6 @@
 import { Heart, MessageSquare } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import Navbar from '../components/navbar';
 import axios from 'axios';
 
 const UserProfile = () => {
