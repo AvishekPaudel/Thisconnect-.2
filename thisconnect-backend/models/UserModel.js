@@ -24,4 +24,6 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true }); // adds createdAt and updatedAt
 
+userSchema.index({ email: 1});
+
 module.exports = mongoose.model('Users', userSchema);

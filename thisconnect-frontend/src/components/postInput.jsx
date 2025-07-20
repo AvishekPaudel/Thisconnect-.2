@@ -178,6 +178,7 @@ export default function ContentCreationForm() {
       const response = await fetch('http://localhost:8000/api/posts', {
         method: 'POST',
         body: formDataToSend,
+        credentials: 'include'
       });
 
       if (response.ok) {

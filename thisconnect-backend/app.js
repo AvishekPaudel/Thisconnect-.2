@@ -2,19 +2,36 @@ const app = require("./server/server.js");
 const express = require('express');
 const connectDB = require('./config/db.js');
 const cors = require('cors');
+const session = require('express-session')
 const authRoutes = require('./routes/auth.js');
 const { registerUser } = require("./controllers/UserRegister.js");
 const dotenv = require('dotenv');
 const postRoutes = require('./routes/postRoutes.js')
 
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',  
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 connectDB();
 
 dotenv.config();
+
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,        // true if using HTTPS
+    sameSite: 'lax'
+  }
+}));
 
 app.use('/api', authRoutes);
 app.use('/api/posts',postRoutes);
