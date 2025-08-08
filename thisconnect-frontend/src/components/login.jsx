@@ -70,7 +70,7 @@ export default function UserLoginForm() {
     });
 
     if (response.status === 200) {
-      navigate('/')
+      navigate('/foryou')
     }
   } catch (error) {
     setSubmitMessage('Login failed. Please check your credentials.');

@@ -18,6 +18,8 @@ export default function SocialHomePage() {
     {name: 'Subhramaniyam', avatar: 'https://via.placeholder.com/150', status: 'offline' },
   ]);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const genres = [
     'All', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
     'Horror', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 

@@ -96,5 +96,21 @@ router.get('/genre/:genreName', async (req, res) => {
 });
 
 
+router.get('/profile/posts', async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    const posts = await Post.find({ user: userId }).sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch user posts' });
+  }
+});
+
 
 module.exports = router;
