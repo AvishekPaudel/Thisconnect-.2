@@ -10,6 +10,7 @@ import Login from './pages/UserLogin'
 import { ThemeModeScript } from "flowbite-react";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import UserProfile from './pages/userProfile'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/feed' element={<Feed />}/>
       <Route path='/UserRegister' element={<Register />}/>
       <Route path='/UserLogin' element={<Login />} />
+      <Route path='/profile' element={<UserProfile />} />
     </Routes>
 )
 }

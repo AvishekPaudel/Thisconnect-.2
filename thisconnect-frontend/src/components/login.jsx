@@ -65,15 +65,12 @@ export default function UserLoginForm() {
   setSubmitMessage('');
 
   try {
-    const response = await axios.post('http://localhost:8000/api/login', formData);
+    const response = await axios.post('http://localhost:8000/api/login', formData,{
+      withCredentials: true
+    });
 
     if (response.status === 200) {
-      setSubmitMessage('Login successful! Welcome back.');
-      // Handle successful login here (e.g., save token, redirect)
-      console.log('User logged in:', response.data);
-      setFormData({ email: '', password: '' });
-      setRememberMe(false);
-      navigate('/feed')
+      navigate('/')
     }
   } catch (error) {
     setSubmitMessage('Login failed. Please check your credentials.');
