@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Heart, MessageSquare, Share, Bookmark, MoreHorizontal } from 'lucide-react';
 import axios from 'axios';
 
-export default function PostCard({ post, getGenreColor }) {
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(post?.likes || 0);
+export default function PostCard({ post, getGenreColor, currentUserId }) {
+  const [isLiked, setIsLiked] = useState(post.likes);
+  const [likeCount, setLikeCount] = useState(post.likes);
 
   if (!post || !post.user) return null; 
 
@@ -15,9 +15,14 @@ export default function PostCard({ post, getGenreColor }) {
     return words.slice(0, wordLimit).join(' ') + '...';
   };
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+  const handleLike = async () => {
+      try {
+        const response = await axios.post(`/api/posts/like/${post._id}`);
+        setIsLiked(response.data.liked);
+        setLikeCount(response.data.likeCount);
+      } catch (error) {
+        console.error('Error liking post:', error);
+      }
   };
 
   const handleComment = () => {

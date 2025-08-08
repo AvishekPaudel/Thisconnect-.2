@@ -1,49 +1,27 @@
-import { Heart, MessageSquare } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
-import Navbar from '../components/navbar';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import UserPost from '../components/userPost';
+import { NavLink } from "react-router";
+
 
 const UserProfile = () => {
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [userProfile, setUserProfile] = useState(null);
-  
-    useEffect(() => {
-      const getProfile = async () => {
-        try {
-          const response = await axios.get('http://localhost:8000/api/posts/profile', { withCredentials: true });
-          setUserProfile(response.data.user);
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-        }
-      };
-  
-      getProfile();
-    }, []);
+  const [posts, setPosts] = useState([]);
 
-  const posts = [
-    { 
-      id: 6, 
-      image: { url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop' },
-      title: 'Tropical Beach',
-      subtitle: 'Paradise found on this pristine tropical beach with crystal clear waters',
-      genre: 'Paradise',
-      user: { firstName: 'Alex', lastName: 'Johnson' },
-      likes: 201,
-      comments: 11,
-      timeAgo: '4d'
-    }
-  ];
-
-  const user = {
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-    name: 'Alex Johnson'
-  };
-
-  const truncateWords = (text, wordLimit) => {
-    const words = text.split(' ');
-    if (words.length <= wordLimit) return text;
-    return words.slice(0, wordLimit).join(' ') + '...';
-  };
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/posts/profile', { withCredentials: true });
+        setUserProfile(response.data.user);
+        const postsResponse = await axios.get('http://localhost:8000/api/posts/profile/posts', { withCredentials: true });
+        setPosts(postsResponse.data);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+    getProfile();
+  }, []);
 
   const getGenreColor = (genre) => {
     const colors = {
@@ -66,26 +44,53 @@ const UserProfile = () => {
     setLikedPosts(newLikedPosts);
   };
 
+  const handlePlusClick = () => {
+    // Add your functionality here (e.g., add story, upload photo, etc.)
+    console.log('Plus icon clicked!');
+  };
+
   return (
     <div className="max-w-4xl mx-auto bg-white min-h-screen">
       {/* Profile Header */}
-      <div className="px-4 py-8">
+      <div className="px-4 text-left">
         <div className="flex items-center gap-8 mb-6">
-          {/* Profile Picture */}
-          <div className="flex-shrink-0">
-            <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-              alt="Profile" 
-              className="w-32 h-32 rounded-full object-cover"
-            />
+          {/* Profile Picture with Ring and Plus Icon */}
+          <div className="flex-shrink-0 relative">
+            {/* Avatar with gradient ring */}
+            <div className="w-36 h-36 rounded-full bg-gray-100 p-1">
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
+                alt="Profile" 
+                className="w-full h-full rounded-full object-cover border-2 border-white"
+              />
+            </div>
+            
+            {/* Plus Icon */}
+            <NavLink
+              to="/feed"
+              className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-200 border-4 border-white"
+            >
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 4v16m8-8H4" 
+                />
+              </svg>
+            </NavLink>
           </div>
 
           {/* Profile Info */}
-          <div className="flex-1">
-            <h1 className="text-2xl font-light ">
-                {userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Loading...'}
+          <div>
+            <h1 className="text-2xl mb-9">
+              {userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Loading...'}
             </h1>
-            
             {/* Stats */}
             <div className="flex gap-8">
               <div className="text-center">
@@ -105,65 +110,30 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* Posts Grid */}
-      <div className="px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <div key={post.id} className="flex justify-center">
-              <div
-                className="rounded-xl shadow bg-white p-4 flex flex-col"
-                style={{ width: 400, height: 500 }}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
-                  <div>
-                    <h2 className="font-semibold">{post.user.firstName} {post.user.lastName}</h2>
-                  </div>
-                </div>
-
-                <h3 className="text-lg font-bold text-left">{post.title}</h3>
-                <p className="text-gray-600 flex-grow text-left">{truncateWords(post.subtitle, 10)}</p>
-
-                {post.image && post.image.url && (
-                  <img
-                    src={post.image.url}
-                    alt={post.title}
-                    className="w-full h-60 object-cover rounded-lg" 
-                  />
-                )}
-
-                <div className="mt-4 flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2 py-1 rounded-full text-white ${getGenreColor(post.genre)}`}>
-                      {post.genre}
-                    </span>
-                    <button
-                      onClick={() => handleLike(post.id)}
-                      className={`flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
-                        likedPosts.has(post.id) 
-                          ? 'bg-red-100 text-red-600' 
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      <Heart 
-                        size={16} 
-                        className={likedPosts.has(post.id) ? 'fill-current' : ''} 
-                      />
-                      <span>{post.likes}</span>
-                    </button>
-                    <button
-                      className="flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                    >
-                      <MessageSquare size={16} />
-                      <span>{post.comments}</span>
-                    </button>
-                  </div>
-                  <span className="text-gray-500">{post.timeAgo}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Post Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 px-4 pb-10">
+        {posts.map((post) => (
+          <div key={post._id} className="bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition">
+            {post.image?.url && (
+              <img
+                src={post.image.url}
+                alt={post.title}
+                className="w-full h-75 object-cover"
+              />
+            )}
+            {/* <div className="p-4">
+              <h3 className="font-semibold text-lg">{post.title}</h3>
+              <p className="text-sm text-gray-600">{post.subtitle}</p>
+              {post.genre && (
+                <span
+                  className={`inline-block mt-2 px-3 py-1 text-xs font-medium text-white rounded-full ${getGenreColor(post.genre)}`}
+                >
+                  {post.genre}
+                </span>
+              )}
+            </div> */}
+          </div>
+        ))}
       </div>
     </div>
   );
