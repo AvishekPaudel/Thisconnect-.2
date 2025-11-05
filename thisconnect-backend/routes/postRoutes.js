@@ -111,6 +111,39 @@ router.get('/profile/posts', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch user posts' });
   }
 });
+router.post('/:postId/like/toggle', async (req, res) => {
+  try {
+    const userId = req.session.userId; 
+    const { postId } = req.params;
+    if (!userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const alreadyLiked = post.likes.includes(userId);
+
+    if (alreadyLiked) {
+      post.likes = post.likes.filter(id => id.toString() !== userId.toString());
+    } else {
+      post.likes.push(userId);
+    }
+
+    await post.save();
+
+    res.json({
+      liked: !alreadyLiked,
+      likesCount: post.likes.length,
+    });
+
+  } catch (err) {
+    console.error("Error toggling like:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 
 module.exports = router;
