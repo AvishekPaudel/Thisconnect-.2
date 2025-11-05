@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth.js');
 const { registerUser } = require("./controllers/UserRegister.js");
 const dotenv = require('dotenv');
 const postRoutes = require('./routes/postRoutes.js')
+const MongoStore = require('connect-mongo'); 
 
 
 app.use(cors({
@@ -26,19 +27,25 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: 'mongodb+srv://avishekpaudel:DJHE21ooFlqoPjhk@avishek-0.au09edd.mongodb.net/?retryWrites=true&w=majority&appName=Avishek-0', 
+    collectionName: 'sessions',
+    ttl: 24 * 60 * 60 
+  }),
   cookie: {
+    maxAge: 1000 * 60 * 60 * 24, 
     httpOnly: true,
-    secure: false,        // true if using HTTPS
+    secure: false, 
     sameSite: 'lax'
   }
 }));
-
 app.use('/api', authRoutes);
 app.use('/api/posts',postRoutes);
 
 app.get('/', (req, res) => {
   res.send('MongoDB connected to Node.js project');
 });
+
 
 const startServer = async () => {
   try {
