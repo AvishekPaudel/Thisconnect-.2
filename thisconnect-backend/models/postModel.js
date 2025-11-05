@@ -35,10 +35,12 @@ const postSchema = new mongoose.Schema({
     required: true
   },
 
-  likes:{
+  likes:
+  [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Users'
   }
+]
 
 }, {timestamps: true})
 
