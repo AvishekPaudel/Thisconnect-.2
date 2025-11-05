@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { cloudinary, storage }= require('../config/cloudinary')
-const Post = require('../models/postModel');
+const Post = require('../models/PostModel');
 const User = require('../models/UserModel');
 
 const upload = multer({storage});
@@ -18,7 +18,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     console.log('📝 req.body:', req.body);
     console.log('📦 req.file:', req.file);
-
+  
     const { title, subtitle, genre } = req.body;
     const userId = req.session.userId;
 
@@ -46,11 +46,53 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
+// PUT /api/posts/:id
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+ 
+
+    const { title, subtitle, genre } = req.body;
+    const userId = req.session.userId;
+    const postId = req.params.id;
+
+    // Find the post
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Check if the post belongs to the logged-in user
+    if (post.user.toString() !== userId) {
+      return res.status(403).json({ error: 'Not authorized to update this post' });
+    }
+
+    // Update text fields if provided
+    if (title) post.title = title;
+    if (subtitle) post.subtitle = subtitle;
+    if (genre) post.genre = genre;
+
+    // Update image if a new one is uploaded
+    if (req.file) {
+      post.image = {
+        url: req.file.path,
+        public_id: req.file.filename
+      };
+    }
+
+    await post.save();
+
+    res.status(200).json({ message: 'Post updated successfully', post });
+  } catch (error) {
+    console.error('Error updating post:', error.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 //get posts for cards
 router.get('/', async (req, res) => {
   try {
     const posts = await Post.find().sort({ createdAt: -1 }).populate('user');  
-    console.log(posts)
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch posts' });
