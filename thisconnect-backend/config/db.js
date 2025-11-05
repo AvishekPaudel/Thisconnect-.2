@@ -1,13 +1,19 @@
+
+const dotenv = require("dotenv")
 const mongoose = require('mongoose');
 const User = require('../models/UserModel')
+const {Friend,Message} = require('../models/FollowerModel')
+
+dotenv.config()
+
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb+srv://avishekpaudel:DJHE21ooFlqoPjhk@avishek-0.au09edd.mongodb.net/?retryWrites=true&w=majority&appName=Avishek-0', {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected successfully');
+    console.error('MongoDB connected successfully');
   } catch (err) {
     console.error('MongoDB connection failed:', err.message);
     process.exit(1);
