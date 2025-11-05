@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Search, MessageCircle, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 export default function Navbar({ searchQuery, setSearchQuery }) {
-  const [userProfile, setUserProfile] = useState(null);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/posts/profile', { withCredentials: true });
-        setUserProfile(response.data.user);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    getProfile();
-  }, []);
-
+  const { user } = useContext(UserContext);
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,9 +50,9 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                 alt="Profile"
                 className="w-8 h-8 rounded-full"
               />
-              <NavLink to="/profile" 
-              className="text-sm font-medium text-gray-700">
-                {userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Loading...'}
+                <NavLink to="/profile" 
+                className="text-sm font-medium text-gray-700">
+                {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
             </NavLink>
             </div>
           </div>

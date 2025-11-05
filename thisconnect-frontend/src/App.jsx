@@ -1,30 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import {Routes, Route} from 'react-router-dom'
 import './App.css'
-import Feed from './pages/feed'
 import Home from './pages/home'
 import Register from './pages/UserRegister'
 import Login from './pages/UserLogin'
-import { ThemeModeScript } from "flowbite-react";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import UserProfile from './pages/userProfile'
 import ThisConnectLanding from './pages/landingPage'
+import UserProfile from './pages/UserProfile'
 
+import { MessageProvider } from './context/MessageContext.jsx'
+import {UserContext} from './context/UserContext.jsx'
+import { useContext } from 'react'
 
 function App() {
+  const {user} = useContext(UserContext)
   return (
-    <Routes>
-      <Route path='/foryou' element={<Home />}/>
-      <Route path='/feed' element={<Feed />}/>
-      <Route path='/UserRegister' element={<Register />}/>
-      <Route path='/UserLogin' element={<Login />} />
-      <Route path='/profile' element={<UserProfile />} />
-      <Route path='/' element={<ThisConnectLanding />} />
-    </Routes>
-)
+    <MessageProvider userId={user._id}>
+      <Routes>
+        <Route path='/foryou' element={<Home />}/>
+        <Route path='/register' element={<Register />}/>
+        <Route path='/login' element={<Login />} />
+        <Route path='/profile' element={<MyProfile />} />
+        <Route path='/' element={<ThisConnectLanding />} />
+        <Route path='/user/:userId' element={<UserProfile />} />
+      </Routes>
+    </MessageProvider>
+  )
 }
 
 export default App

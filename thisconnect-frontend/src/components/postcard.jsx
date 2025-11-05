@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Heart, MessageSquare, Share, Bookmark, MoreHorizontal } from 'lucide-react';
+import { Heart, MessageSquare } from 'lucide-react';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext';
+import { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function PostCard({ post, getGenreColor, currentUserId }) {
-  const [isLiked, setIsLiked] = useState(post.likes);
-  const [likeCount, setLikeCount] = useState(post.likes);
+  
 
+  const [likeCount, setLikeCount] = useState(post.likes.length);
+  const {user} = useContext(UserContext)
+  const [isLiked, setIsLiked] = useState(
+  user ? post.likes.includes(user._id) : false
+);
   if (!post || !post.user) return null; 
 
   const truncateWords = (text, wordLimit) => {
@@ -16,21 +23,26 @@ export default function PostCard({ post, getGenreColor, currentUserId }) {
   };
 
   const handleLike = async () => {
-      try {
-        const response = await axios.post(`/api/posts/like/${post._id}`);
-        setIsLiked(response.data.liked);
-        setLikeCount(response.data.likeCount);
-      } catch (error) {
-        console.error('Error liking post:', error);
-      }
-  };
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/posts/${post._id}/like/toggle`,
+      {},
+      { withCredentials: true }
+    );
+
+    setLikeCount(response.data.likesCount);
+    setIsLiked(response.data.liked);
+
+  } catch (error) {
+    console.error("Error liking post:", error);
+  }
+};
 
   const handleComment = () => {
-    // Handle comment functionality
     console.log('Comment clicked');
   };
 
-  const { user, title, subtitle, genre, image, comments, timeAgo } = post;
+  const { user: postUser, title, subtitle, genre, image, comments, timeAgo } = post;
   const genreColor = getGenreColor ? getGenreColor(genre) : 'bg-blue-500';
 
   return (
@@ -39,12 +51,14 @@ export default function PostCard({ post, getGenreColor, currentUserId }) {
         className="rounded-xl shadow bg-white p-4 flex flex-col"
         style={{ width: 400, height: 500 }}
       >
+        <NavLink to={`/user/${postUser._id}`}>
         <div className="flex items-center gap-3 mb-2">
-          <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+          <img src={postUser.avatar} alt={postUser.name} className="w-10 h-10 rounded-full" />
           <div>
             <h2 className="font-semibold">{post.user.firstName} {post.user.lastName}</h2>
           </div>
         </div>
+        </NavLink>
 
         <h3 className="text-lg font-bold text-left">{title}</h3>
         <p className="text-gray-600 flex-grow text-left">{truncateWords(subtitle, 10)}</p>
@@ -63,6 +77,7 @@ export default function PostCard({ post, getGenreColor, currentUserId }) {
               {genre}
             </span>
             <button
+            disabled={!user}
               onClick={handleLike}
               className={`flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
                 isLiked 

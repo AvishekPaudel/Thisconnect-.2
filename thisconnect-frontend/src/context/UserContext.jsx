@@ -22,9 +22,9 @@ export const UserProvider = ({ children }) => {
           setUser(response.data.user || null);
         }
       } catch (error) {
-        const publicPaths = ["/UserLogin", "/UserRegister", "/"];
+        const publicPaths = ["/login", "/register", "/"];
         if (!publicPaths.includes(location.pathname)) {
-          navigate("/UserLogin");
+          navigate("/login");
         }
       } finally {
         setLoading(false);
@@ -42,11 +42,11 @@ export const UserProvider = ({ children }) => {
         
         setUser(null);
         
-        navigate('/UserLogin');
+        navigate('/login');
       } catch (error) {
         console.error('Logout error:', error);
         setUser(null);
-        navigate('/UserLogin');
+        navigate('/login');
       }
     };
 
