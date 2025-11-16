@@ -49,10 +49,10 @@ messageRouter.post("/sendmessage", async (req, res) => {
 });
 
 
-messageRouter.post("conversation/:userId",async(req,res)=>{
+messageRouter.post("/conversation/:userId",async(req,res)=>{
   try {
     const { userId } = req.params;
-    const currentUserId = req.user.id;
+    const currentUserId = req.session.userId;
 
     const messages = await Message.find({
       $or: [
