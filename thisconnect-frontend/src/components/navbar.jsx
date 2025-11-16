@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Search, MessageCircle, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 export default function Navbar({ searchQuery, setSearchQuery }) {
-  const [userProfile, setUserProfile] = useState(null);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/posts/profile', { withCredentials: true });
-        setUserProfile(response.data.user);
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
-
-    getProfile();
-  }, []);
-
+  const { user } = useContext(UserContext);
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">L</span>
+            <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-orange-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">TK</span>
             </div>
             <NavLink to="/foryou" 
               className="ml-2 text-xl font-bold text-gray-900 hover:underline">
@@ -48,25 +34,21 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
           </div>
 
           <div className="flex items-center space-x-4">
+            <NavLink to="/messages" className="text-sm font-medium text-gray-700">
             <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <MessageCircle className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
             </button>
-
-            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <Users className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
-            </button>
+            </NavLink>
 
             <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 rounded-lg p-2 transition-colors">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
-                alt="Profile"
-                className="w-8 h-8 rounded-full"
+              <img 
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                class="w-10 h-10 rounded-full"
+                alt="User avatar"
               />
-              <NavLink to="/profile" 
-              className="text-sm font-medium text-gray-700">
-                {userProfile ? `${userProfile.firstName} ${userProfile.lastName}` : 'Loading...'}
+                <NavLink to="/profile" 
+                className="text-sm font-medium text-gray-700">
+                {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
             </NavLink>
             </div>
           </div>

@@ -3,6 +3,8 @@ import { NavLink } from "react-router";
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
+import { UserContext } from "../context/UserContext";
+import { useContext } from 'react';
 
 
 export default function UserLoginForm() {
@@ -17,6 +19,7 @@ export default function UserLoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const { setUser } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,6 +73,7 @@ export default function UserLoginForm() {
     });
 
     if (response.status === 200) {
+      setUser(response.data.user);
       navigate('/foryou')
     }
   } catch (error) {
@@ -219,7 +223,7 @@ const handleKeyPress = (e) => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <NavLink to="/UserRegister"
+            <NavLink to="/register"
             className="text-blue-600 hover:text-blue-500 font-medium">
               Sign up
             </NavLink>

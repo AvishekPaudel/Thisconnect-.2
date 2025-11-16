@@ -14,15 +14,23 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // no duplicate emails
+    unique: true, 
     lowercase: true,
     trim: true
   },
   password: {
     type: String,
     required: true
-  }
-}, { timestamps: true }); // adds createdAt and updatedAt
+  },
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users'
+  }],
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users'
+  }]
+}, { timestamps: true }); 
 
 userSchema.index({ email: 1});
 
