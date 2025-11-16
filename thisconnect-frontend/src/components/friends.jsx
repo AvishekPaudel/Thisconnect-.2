@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 export default function FriendsList() {
   const [friends, setFriends] = useState([]);
@@ -13,7 +14,7 @@ export default function FriendsList() {
           withCredentials: true,
         });
 
-        setFriends(response.data.friends || []);
+        setFriends(response.data.followers || []);
         setFollowing(response.data.following || []);
       } catch (error) {
         console.error("Error fetching friends/following:", error);
@@ -33,6 +34,41 @@ export default function FriendsList() {
     );
   }
 
+  const renderUserLink = (user) => (
+    <NavLink
+      key={user._id}
+      to={`/user/${user._id}`}
+      className={({ isActive }) =>
+        `flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors ${
+          isActive ? "bg-blue-100" : ""
+        }`
+      }
+    >
+      <div className="relative">
+        <img
+          src={user.avatar || "https://cdn-icons-png.flaticon.com/512/847/847969.png"}
+          alt={user.firstName}
+          className="w-8 h-8 rounded-full"
+        />
+        <div
+          className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
+            user.status === "online"
+              ? "bg-green-500"
+              : user.status === "away"
+              ? "bg-yellow-500"
+              : "bg-gray-400"
+          }`}
+        />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-medium text-gray-900">
+          {user.firstName} {user.lastName}
+        </p>
+        <p className="text-xs text-gray-500 capitalize">{user.status || "offline"}</p>
+      </div>
+    </NavLink>
+  );
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24 w-64 h-95 overflow-y-auto">
       {/* Friends Section */}
@@ -41,40 +77,7 @@ export default function FriendsList() {
         <p className="text-sm text-gray-500 mb-6">No followers yet.</p>
       ) : (
         <div className="space-y-3 mb-6">
-          {friends.map((friend, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-            >
-              <div className="relative">
-                <img
-                  src={
-                    friend.avatar ||
-                    "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-                  }
-                  alt={friend.firstName}
-                  className="w-8 h-8 rounded-full"
-                />
-                <div
-                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                    friend.status === "online"
-                      ? "bg-green-500"
-                      : friend.status === "away"
-                      ? "bg-yellow-500"
-                      : "bg-gray-400"
-                  }`}
-                />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  {friend.firstName} {friend.lastName}
-                </p>
-                <p className="text-xs text-gray-500 capitalize">
-                  {friend.status || "offline"}
-                </p>
-              </div>
-            </div>
-          ))}
+          {friends.map(renderUserLink)}
         </div>
       )}
 
@@ -84,40 +87,7 @@ export default function FriendsList() {
         <p className="text-sm text-gray-500">Not following anyone yet.</p>
       ) : (
         <div className="space-y-3">
-          {following.map((person, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-            >
-              <div className="relative">
-                <img
-                  src={
-                    person.avatar ||
-                    "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-                  }
-                  alt={person.firstName}
-                  className="w-8 h-8 rounded-full"
-                />
-                <div
-                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                    person.status === "online"
-                      ? "bg-green-500"
-                      : person.status === "away"
-                      ? "bg-yellow-500"
-                      : "bg-gray-400"
-                  }`}
-                />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  {person.firstName} {person.lastName}
-                </p>
-                <p className="text-xs text-gray-500 capitalize">
-                  {person.status || "offline"}
-                </p>
-              </div>
-            </div>
-          ))}
+          {following.map(renderUserLink)}
         </div>
       )}
 

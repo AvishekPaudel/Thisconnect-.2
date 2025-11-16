@@ -74,15 +74,15 @@ const UserProfile = () => {
             {/* Avatar with gradient ring */}
             <div className="w-36 h-36 rounded-full bg-gray-100 p-1">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-                alt="Profile" 
-                className="w-full h-full rounded-full object-cover border-2 border-gray-100"
-              />
+                      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                      class="w-full h-full rounded-full object-cover border-2 border-gray-100"
+                      alt="User avatar"
+                    />
             </div>
             
             {/* Plus Icon */}
             <NavLink
-              to="/feed"
+              to="/CreatePost"
               className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transition-colors duration-200 border-4 border-gray-100"
             >
               <svg 
@@ -140,17 +140,6 @@ const UserProfile = () => {
                 className="w-full h-75 object-cover"
               />
             )}
-            {/* <div className="p-4">
-              <h3 className="font-semibold text-lg">{post.title}</h3>
-              <p className="text-sm text-gray-600">{post.subtitle}</p>
-              {post.genre && (
-                <span
-                  className={`inline-block mt-2 px-3 py-1 text-xs font-medium text-white rounded-full ${getGenreColor(post.genre)}`}
-                >
-                  {post.genre}
-                </span>
-              )}
-            </div> */}
           </div>
         ))}
       </div>

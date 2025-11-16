@@ -53,7 +53,11 @@ export default function PostCard({ post, getGenreColor, currentUserId }) {
       >
         <NavLink to={`/user/${postUser._id}`}>
         <div className="flex items-center gap-3 mb-2">
-          <img src={postUser.avatar} alt={postUser.name} className="w-10 h-10 rounded-full" />
+          <img 
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                class="w-10 h-10 rounded-full"
+                alt="User avatar"
+              />
           <div>
             <h2 className="font-semibold">{post.user.firstName} {post.user.lastName}</h2>
           </div>

@@ -94,11 +94,11 @@ const UserProfile = () => {
         <div className="flex items-center gap-8 mb-6">
           {/* Profile Picture */}
           <div className="flex-shrink-0">
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover"
-            />
+            <img 
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                class="w-32 h-32 rounded-full"
+                alt="User avatar"
+              />
           </div>
 
           {/* Profile Info */}
@@ -155,10 +155,10 @@ const UserProfile = () => {
                   style={{ width: 400, height: 500 }}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <img
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-                      alt={user.firstName}
-                      className="w-10 h-10 rounded-full"
+                    <img 
+                      src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                      class="w-10 h-10 rounded-full"
+                      alt="User avatar"
                     />
                     <div>
                       <h2 className="font-semibold">
